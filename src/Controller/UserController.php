@@ -47,7 +47,7 @@ class UserController extends AbstractController
         $nbUsers = $repository->count([]);
         $nbrPage = ceil($nbUsers/$nbre) ;
 
-        echo $this->helpers->sayHello();
+        //echo $this->helpers->sayHello();
 
         $users = $repository->findBy([], ['age' => 'DESC'],$nbre,($page - 1) * $nbre);
         return $this->render('user/index.html.twig', [

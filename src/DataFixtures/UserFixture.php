@@ -2,6 +2,7 @@
 
 namespace App\DataFixtures;
 
+use App\Entity\Equipe;
 use App\Entity\Role;
 use App\Entity\Personne;
 use Doctrine\Bundle\FixturesBundle\Fixture;
@@ -28,6 +29,7 @@ class UserFixture extends Fixture implements DependentFixtureInterface
             $user->setName($faker->name);
             $user->setFirstname($faker->firstName);
             $user->setAge($faker->numberBetween(18,65));
+
 
             $roles = $manager->getRepository(Role::class);
             $role = $roles->find(($faker->numberBetween(0,100))%3+1);

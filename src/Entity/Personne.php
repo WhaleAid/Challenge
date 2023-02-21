@@ -42,6 +42,9 @@ class Personne
     #[ORM\OneToMany(mappedBy: 'lead', targetEntity: Tableau::class)]
     private Collection $tableaux;
 
+    #[ORM\ManyToOne(inversedBy: 'chef')]
+    private ?Equipe $equipe = null;
+
     public function __construct()
     {
         $this->tableaux = new ArrayCollection();
@@ -167,6 +170,18 @@ class Personne
                 $tableaux->setLead(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getEquipe(): ?Equipe
+    {
+        return $this->equipe;
+    }
+
+    public function setEquipe(?Equipe $equipe): self
+    {
+        $this->equipe = $equipe;
 
         return $this;
     }
