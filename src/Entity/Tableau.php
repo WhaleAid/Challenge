@@ -8,7 +8,7 @@ use App\Traits\TimeStampTrait;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: TableauRepository::class)]
-#[ORM\HasLifecycleCallbacks]
+
 #[ORM\Table('`tableau`')]
 class Tableau
 {
