@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ProjetRepository::class)]
 #[ORM\HasLifecycleCallbacks]
+#[ORM\Table(name: '`projet`')]
 class Projet
 {
 
@@ -19,7 +20,7 @@ class Projet
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(type: Types::SMALLINT)]
+    #[ORM\Column(type: Types::SMALLINT, nullable: true)]
     private ?int $id_chef = null;
 
 
@@ -31,6 +32,9 @@ class Projet
 
     #[ORM\OneToOne(inversedBy: 'projet', cascade: ['persist', 'remove'])]
     private ?Tableau $tableau = null;
+
+    #[ORM\OneToOne(mappedBy: 'projet', cascade: ['persist', 'remove'])]
+    private ?Equipe $equipe = null;
 
     public function getId(): ?int
     {
@@ -61,6 +65,28 @@ class Projet
     public function setTableau(?Tableau $tableau): self
     {
         $this->tableau = $tableau;
+
+        return $this;
+    }
+
+    public function getEquipe(): ?Equipe
+    {
+        return $this->equipe;
+    }
+
+    public function setEquipe(?Equipe $equipe): self
+    {
+        // unset the owning side of the relation if necessary
+        if ($equipe === null && $this->equipe !== null) {
+            $this->equipe->setProjet(null);
+        }
+
+        // set the owning side of the relation if necessary
+        if ($equipe !== null && $equipe->getProjet() !== $this) {
+            $equipe->setProjet($this);
+        }
+
+        $this->equipe = $equipe;
 
         return $this;
     }
