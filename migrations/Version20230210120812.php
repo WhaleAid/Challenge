@@ -20,7 +20,8 @@ final class Version20230210120812 extends AbstractMigration
     public function up(Schema $schema): void
     {
         // this up() migration is auto-generated, please modify it to your needs
-        $this->addSql('ALTER TABLE user AUTO_INCREMENT = 1');
+     //   $this->addSql('ALTER TABLE "user" AUTO_INCREMENT = 1');
+        $this->addSql('SELECT setval(\'user_id_seq\', 1, false)');
         $this->addSql('ALTER TABLE projet ADD created_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL');
         $this->addSql('ALTER TABLE projet ADD updated_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL');
         $this->addSql('ALTER TABLE role ADD created_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL');

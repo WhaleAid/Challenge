@@ -15,13 +15,15 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use App\Services\SendinblueMailer;
+
 
 
 #[Route('user')]
 class UserController extends AbstractController
 {
 
-    public function __construct(private Helpers $helpers)
+    public function __construct(private Helpers $helpers, private SendinblueMailer $sendinblueMailer)
     {
     }
 
@@ -120,10 +122,10 @@ class UserController extends AbstractController
             $entityManager->flush();
 
             $this->addFlash( 'success', $user->getFirstname(). "a été ajouté avec succès");
-
+            $this->sendinblueMailer->send(subject:"Enregistrement nouvel utilisateur",content:"Un nouvel utilisateur a été ajouté avec succès" );
             return $this->redirectToRoute('user.list.alls');
         }
-        else
+        else    
         {
             return $this->render('user/add-user.html.twig', [
                 'form' => $form->createView()
