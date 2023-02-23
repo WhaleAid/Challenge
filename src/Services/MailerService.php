@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Service;
+namespace App\Services;
 
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\MailerInterface;
@@ -14,7 +14,7 @@ class MailerService
 
     }
 
-    public function sendEmail($to = 'idirwalidhakim32@gmail.com',
+    public function sendEmail($to = 's.hadef@outlook.fr',
                             $content = '<p>See Twig integration for better HTML integration!</p>',
                             $subject = 'Time for Symfony Mailer!'
     ):void
@@ -22,7 +22,7 @@ class MailerService
 
 
         $email = (new Email())
-            ->from('idirwalidhakim31@gmail.com')
+            ->from('soheib.hadef@gmail.com')
             ->to($to)
             //->cc('cc@example.com')
             //->bcc('bcc@example.com')

@@ -6,9 +6,9 @@ use App\Entity\Personne;
 use App\Entity\Role;
 use App\Entity\User;
 use App\Form\UserType;
-use App\Service\Helpers;
-use App\Service\MailerService;
-use App\Service\SendinblueMailer;
+use App\Services\Helpers;
+use App\Services\MailerService;
+use App\Services\SendinblueMailer;
 use Doctrine\Persistence\ManagerRegistry;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -16,6 +16,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+
 
 
 #[Route('user')]
@@ -121,10 +122,10 @@ class UserController extends AbstractController
             $entityManager->flush();
 
             $this->addFlash( 'success', $user->getFirstname(). "a été ajouté avec succès");
-
+           // $this->sendinblueMailer->sendEmail($user->getEmail(),"Enregistrement nouvel utilisateur",content:"Un nouvel utilisateur a été ajouté avec succès" );
             return $this->redirectToRoute('user.list.alls');
         }
-        else
+        else    
         {
             return $this->render('user/add-user.html.twig', [
                 'form' => $form->createView()
@@ -253,7 +254,7 @@ class UserController extends AbstractController
     }
 
     #[Route('/update/{id}/{firstname}/{name}/{age}',name :'user.update')]
-    public function updateUser(User $user = null,$firstname ,$name,$age, ManagerRegistry $doctrine) : RedirectResponse
+    public function updateUser(Personne $user = null,$firstname ,$name,$age, ManagerRegistry $doctrine) : RedirectResponse
     {
         if($user)
         {
