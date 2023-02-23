@@ -6,8 +6,9 @@ use App\Entity\Personne;
 use App\Entity\Role;
 use App\Entity\User;
 use App\Form\UserType;
-use App\Services\Helpers;
-use App\Services\MailerService;
+use App\Service\Helpers;
+use App\Service\MailerService;
+use App\Service\SendinblueMailer;
 use Doctrine\Persistence\ManagerRegistry;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -21,7 +22,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class UserController extends AbstractController
 {
 
-    public function __construct(private Helpers $helpers)
+    public function __construct(private Helpers $helpers, private SendinblueMailer $sendinblueMailer)
     {
     }
 
@@ -158,7 +159,7 @@ class UserController extends AbstractController
             Personne $user = null ,
             ManagerRegistry $doctrine,
             Request $request,
-            MailerService $mailer
+            /*MailerService $mailer*/
     ): Response
     {
         $new = false;
@@ -191,7 +192,12 @@ class UserController extends AbstractController
                 $mailMessage = $user->getFirstname().' '.$user->getName().' a été édité avec succes';
             }
 
-            $mailer->sendEmail(content: $mailMessage);
+            //$mailer->sendEmail(content: $mailMessage);
+
+            $this->sendinblueMailer->sendEmail("idirwalidhakim32@gmail.com",
+                "Test Challenge",
+                "<p>hello </p>"
+            );
             return $this->redirectToRoute('user.list.alls');
         }
         else
