@@ -1,0 +1,17 @@
+{% extends 'emails/base.html.twig' %}
+
+{% block content %}
+    <h2>Tâche terminée</h2>
+    <p>Bonjour {{ user.username }},</p>
+    <p>La tâche "{{ task.title }}" a été marquée comme terminée.</p>
+    <p>Voici les détails de la tâche :</p>
+    <ul>
+        <li><strong>Titre :</strong> {{ task.title }}</li>
+        <li><strong>Description :</strong> {{ task.description }}</li>
+        <li><strong>Date de création :</strong> {{ task.createdAt|date('d/m/Y H:i:s') }}</li>
+        <li><strong>Assigné à :</strong> {{ task.assignedTo.username }}</li>
+        <li><strong>Date de fin :</strong> {{ task.completedAt|date('d/m/Y H:i:s') }}</li>
+    </ul>
+    <p>Bien cordialement,</p>
+    <p>L'équipe de notre site</p>
+{% endblock %}

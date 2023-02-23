@@ -1,0 +1,16 @@
+{% extends 'emails/base.html.twig' %}
+
+{% block content %}
+    <h2>Affectation d'une tâche</h2>
+    <p>Bonjour {{ user.username }},</p>
+    <p>Une nouvelle tâche "{{ task.title }}" vous a été affectée.</p>
+    <p>Voici les détails de la tâche :</p>
+    <ul>
+        <li><strong>Titre :</strong> {{ task.title }}</li>
+        <li><strong>Description :</strong> {{ task.description }}</li>
+        <li><strong>Date de création :</strong> {{ task.createdAt|date('d/m/Y H:i:s') }}</li>
+        <li><strong>Assigné à :</strong> {{ task.assignedTo.username }}</li>
+    </ul>
+    <p>Bien cordialement,</p>
+    <p>L'équipe de notre site</p>
+{% endblock %}
