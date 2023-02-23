@@ -122,7 +122,7 @@ class UserController extends AbstractController
             $entityManager->flush();
 
             $this->addFlash( 'success', $user->getFirstname(). "a été ajouté avec succès");
-            $this->sendinblueMailer->send(subject:"Enregistrement nouvel utilisateur",content:"Un nouvel utilisateur a été ajouté avec succès" );
+           // $this->sendinblueMailer->sendEmail($user->getEmail(),"Enregistrement nouvel utilisateur",content:"Un nouvel utilisateur a été ajouté avec succès" );
             return $this->redirectToRoute('user.list.alls');
         }
         else    
@@ -249,7 +249,7 @@ class UserController extends AbstractController
     }
 
     #[Route('/update/{id}/{firstname}/{name}/{age}',name :'user.update')]
-    public function updateUser(User $user = null,$firstname ,$name,$age, ManagerRegistry $doctrine) : RedirectResponse
+    public function updateUser(Personne $user = null,$firstname ,$name,$age, ManagerRegistry $doctrine) : RedirectResponse
     {
         if($user)
         {

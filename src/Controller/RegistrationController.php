@@ -45,15 +45,20 @@ class RegistrationController extends AbstractController
 
             $entityManager->persist($user);
             $entityManager->flush();
-            $this->sendinblueMailer->sendEmail($user->getEmail(), 'Confirmation d\'inscription', 'registration/confirmation_email.html.twig', ['user' => $user]);
+            $subject = 'Welcome to My Website';
+            $body = 'Hello ,<br><br>Thank you for registering on our website!';
+            $this->sendinblueMailer->sendEmail($user->getEmail(), $subject, $body);
+            
+            //$this->sendinblueMailer->sendEmail($user->getEmail(), 'Confirmation d\'inscription', 'templates/registration/confirmation_email.html.twig');
+
             // generate a signed url and email it to the user
-            $this->emailVerifier->sendEmailConfirmation('app_verify_email', $user,
-                (new TemplatedEmail())
-                    ->from(new Address('idirwalidhakim31@gmail.com', 'Challenge Symfony Auth'))
-                    ->to($user->getEmail())
-                    ->subject('Please Confirm your Email')
-                    ->htmlTemplate('registration/confirmation_email.html.twig')
-            );
+            // $this->emailVerifier->sendEmailConfirmation('app_verify_email', $user,
+            //     (new TemplatedEmail())
+            //         ->from(new Address('idirwalidhakim31@gmail.com', 'Challenge Symfony Auth'))
+            //         ->to($user->getEmail())
+            //         ->subject('Please Confirm your Email')
+            //         ->htmlTemplate('registration/confirmation_email.html.twig')
+            // );
             // do anything else you need here, like send an email
 
             return $userAuthenticator->authenticateUser(

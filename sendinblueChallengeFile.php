@@ -1,12 +1,21 @@
 <?php
+use Symfony\Component\Dotenv\Dotenv;
+
 require_once(__DIR__ . '/vendor/autoload.php');
 
+$dotenv = new Dotenv();
+$dotenv->loadEnv('.env');
+
+$sendinblueApiKey = $_ENV['SENDINBLUE_API_KEY'];
 // Configure API key authorization: api-key
-$config = SendinBlue\Client\Configuration::getDefaultConfiguration()->setApiKey('api-key', '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');
+
+$config = SendinBlue\Client\Configuration::getDefaultConfiguration()->setApiKey('api-key', $sendinblueApiKey);
+
 // Uncomment below to setup prefix (e.g. Bearer) for API key, if needed
 // $config = SendinBlue\Client\Configuration::getDefaultConfiguration()->setApiKeyPrefix('api-key', 'Bearer');
 // Configure API key authorization: partner-key
-$config = SendinBlue\Client\Configuration::getDefaultConfiguration()->setApiKey('partner-key', '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');
+$config = SendinBlue\Client\Configuration::getDefaultConfiguration()->setApiKey('partner-key', $sendinblueApiKey);
+
 // Uncomment below to setup prefix (e.g. Bearer) for API key, if needed
 // $config = SendinBlue\Client\Configuration::getDefaultConfiguration()->setApiKeyPrefix('partner-key', 'Bearer');
 

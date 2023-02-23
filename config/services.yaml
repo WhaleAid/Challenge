@@ -43,4 +43,5 @@ services:
     App\Services\SendinblueMailer:
         class: App\Services\SendinblueMailer
         arguments:
-            $sendinblueApiKey: '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'
+            
+            $sendinblueApiKey: '%env(resolve:SENDINBLUE_API_KEY)%'

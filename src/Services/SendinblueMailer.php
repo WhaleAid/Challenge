@@ -19,8 +19,10 @@ class SendinblueMailer
 
     public function sendEmail($to, $subject, $body)
     {
-        //$config = Configuration::getDefaultConfiguration()->setApiKey('api-key', $this->sendinblueApiKey);
-        $config = Configuration::getDefaultConfiguration()->setApiKey('api-key','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' );
+        $twig = new \Twig\Environment(new \Twig\Loader\FilesystemLoader('../templates/emails'));
+        $body = $twig->render('confirmation_email.html.twig', ['name' => 'soheib']);
+        $config = Configuration::getDefaultConfiguration()->setApiKey('api-key', $this->sendinblueApiKey);
+        
         $apiInstance = new TransactionalEmailsApi(new Client(), $config);
 
         $sendSmtpEmail = new SendSmtpEmail([
