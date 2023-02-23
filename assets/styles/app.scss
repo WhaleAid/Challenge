@@ -1,6 +1,5 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-body {
-    background-color: lightgray;
-}
+@import './scss/login.scss';
+@import './scss/animations.scss';
