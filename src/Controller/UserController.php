@@ -40,7 +40,7 @@ class UserController extends AbstractController
 
     #[Route('/alls/{page?1}/{nbre?12}', name: 'user.list.alls')]
     /**
-     * @IsGranted("ROLE_USER")
+     * @IsGranted("ROLE_ADMIN")
      *
      */
     public function indexAlls(ManagerRegistry $doctrine, $page, $nbre) : Response
