@@ -26,11 +26,7 @@ services:
             - '../src/Entity/'
             - '../src/Kernel.php'
 
-    App\Service\SendinblueMailer:
-        class: App\Service\SendinblueMailer
-        arguments:
-            #$sendinblueApiKey: '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'
-            $sendinblueApiKey: '%env(resolve:SENDINBLUE_API_KEY)%'
+
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
     # SendinBlue\Client\Configuration:
