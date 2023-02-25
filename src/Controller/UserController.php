@@ -40,18 +40,20 @@ class UserController extends AbstractController
 
     #[Route('/alls/{page?1}/{nbre?12}', name: 'user.list.alls')]
     /**
-     * @IsGranted("ROLE_ADMIN")
+     * @IsGranted("ROLE_USER")
      *
      */
     public function indexAlls(ManagerRegistry $doctrine, $page, $nbre) : Response
     {
-        $repository = $doctrine->getRepository(Personne::class);
+        $repository = $doctrine->getRepository(User::class);
         $nbUsers = $repository->count([]);
         $nbrPage = ceil($nbUsers/$nbre) ;
 
         //echo $this->helpers->sayHello();
 
-        $users = $repository->findBy([], ['age' => 'DESC'],$nbre,($page - 1) * $nbre);
+        $users = $repository->findBy([], [],$nbre,($page - 1) * $nbre);
+
+        //dd($users);
         return $this->render('user/index.html.twig', [
             'users' => $users,
             'isPaginated' => true,

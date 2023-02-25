@@ -10,12 +10,12 @@
 <body>
     Tous les tableaux :
     <ul>
-        {{ dump(tableaux) }}
-        {% for tab in tableaux %}
-            <li> id du tableau : {{ tab.id}} - Nom du Tableau : {{ tab.name }} __ {{ tab.projet }} __ {{ tab.lead}}
-                <a href="#">Details</a>
-                <a href="#">Remove</a>
-                <a href="#">Edit</a>
+        {{ dump(tableaus) }}
+        {% for tab in tableaus %}
+            <li> id du tableau : {{ tab.id}} | Nom du Tableau : {{ tab.name }} | Nom Du projet : {{ tab.projet }} | Lead Projet : {{ tab.lead.firstname}} {{ tab.lead.name}}
+                <a href="{{ path('adm.board.detail', {id: tab.id}) }}">Details</a>
+                <a href="{{ path('adm.board.remove', {id: tab.id}) }}">Remove</a>
+                <a href="{{ path('adm.board.edit', {id: tab.id}) }}">Edit</a>
             </li>
         {% endfor %}
     </ul>

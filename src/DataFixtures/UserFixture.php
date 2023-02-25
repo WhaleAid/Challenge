@@ -2,9 +2,11 @@
 
 namespace App\DataFixtures;
 
-use App\Entity\Equipe;
-use App\Entity\Role;
-use App\Entity\Personne;
+
+use App\Entity\Dev;
+use App\Entity\Lead;
+use App\Entity\Manager;
+use App\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
@@ -14,27 +16,41 @@ class UserFixture extends Fixture implements DependentFixtureInterface
 {
     public function load(ObjectManager $manager): void
     {
-        // $product = new Product();
-        // $manager->persist($product);
-        $rolesName = ['developer', 'apprentice' ,'Lead', 'Admin'];
-        $desciptions = ['Execute Task,not able to create Project or Team but create Task and assign it to apprentice',
-            'Can execute Task',
-            'Can create Project and Team. Can assign Task to Developer',
-            'Has Admin privileges'];
 
         $faker = Factory::create('fr_FR');
-        for ($i=0;$i<40;$i++)
+        for ($i=0;$i<3;$i++)
         {
-            $user = new Personne();
+            $user = new Manager();
             $user->setName($faker->name);
             $user->setFirstname($faker->firstName);
-            $user->setAge($faker->numberBetween(18,65));
+            $user->setEmail($faker->email);
+            $user->setPassword($faker->password);
+            $user->setRoles(["ROLE_MANAGER"]);
 
+            $manager->persist($user);
+        }
 
-            $roles = $manager->getRepository(Role::class);
-            $role = $roles->find(($faker->numberBetween(0,100))%3+1);
+        for ($i=0;$i<5;$i++)
+        {
+            $user = new Lead();
+            $user->setName($faker->name);
+            $user->setFirstname($faker->firstName);
+            $user->setEmail($faker->email);
+            $user->setPassword($faker->password);
 
-            $user->setRole($role);
+            $user->setRoles(["ROLE_LEAD"]);
+
+            $manager->persist($user);
+        }
+
+        for ($i=0;$i<12;$i++)
+        {
+            $user = new Dev();
+            $user->setName($faker->name);
+            $user->setFirstname($faker->firstName);
+            $user->setEmail($faker->email);
+            $user->setPassword($faker->password);
+            $user->setRoles(["ROLE_DEV"]);
 
             $manager->persist($user);
         }

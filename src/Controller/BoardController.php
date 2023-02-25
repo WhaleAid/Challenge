@@ -8,12 +8,16 @@ use App\Entity\Personne;
 use Doctrine\Persistence\ManagerRegistry;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Security;
 
 /**
- * @IsGranted("ROLE_ADMIN")
+ * @IsGranted("ROLE_USER")
  *
  */
 #[Route('adm/board')]
@@ -28,10 +32,9 @@ class BoardController extends AbstractController
     {
         $repository = $this->doctrine->getRepository(Tableau::class);
         $tableaux =  $repository->findAll();
-        //dd($tableaux);
         return $this->render('board/allBoards.html.twig',
         [
-            'tableaux' => $tableaux
+            'tableaus' => $tableaux
         ]);
     }
     #[Route('/add', name: 'adm.board.add')]
@@ -45,9 +48,28 @@ class BoardController extends AbstractController
 
 
         $form->handleRequest($request);
-
-        if($form->isSubmitted())
+        //dd($form->get('Lead')->getData());
+        if($form->isSubmitted() && $form->isValid())
         {
+            //dd($form->get('Lead')->getData());
+
+            /*$lead = $form->get('lead')->getData();
+            $lead_personne = new Personne();
+
+            if ($lead instanceof Personne) {
+                //dd($lead);
+                $tableau->setLead($form->get('lead')->getData());
+            }*/
+
+
+
+            //dd($firstName);
+            //dd($name);
+            //dd($age);
+
+
+
+
 
             $entityManager->persist($tableau);
             $entityManager->flush();
@@ -65,7 +87,52 @@ class BoardController extends AbstractController
         }
     }
 
-    #[Route('/edit', name:'adm.board.edit')]
+    #[Route('/ajouter', name: 'adm.board.ajouter')]
+    public function nouveauTableau(Request $request)
+    {
+        $tableau = new Tableau();
+
+        $form = $this->createFormBuilder($tableau)
+            ->add('name')
+            ->add('lead', ChoiceType::class, [
+                'choices' => $this->doctrine->getRepository(Personne::class)->findAll(),
+                'choice_label' => 'name', // remplacer 'nom' par le champ que vous souhaitez afficher dans la liste déroulante
+                'placeholder' => 'Sélectionner une personne', // facultatif: affiche un choix vide au début de la liste déroulante
+            ])
+            ->add('enregistrer', SubmitType::class)
+            ->getForm();
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            $lead = $form->get('lead')->getData();
+            //dd($lead);
+
+
+            if ($lead instanceof Personne) {
+                //dd($lead);
+                $tableau->setLead($lead);
+
+            }
+
+            $entityManager = $this->doctrine->getManager();
+            $entityManager->persist($tableau);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('adm.board');
+        }
+
+        return $this->render('board/nouveau.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
+
+
+
+
+
+    #[Route('/edit/{id?0}', name:'adm.board.edit')]
     public function editBoard(Tableau $tableau = null ,
                               ManagerRegistry $doctrine,
                               Request $request) : Response
@@ -77,7 +144,7 @@ class BoardController extends AbstractController
             $tableau = new Tableau();
         }
 
-        $form = $this->createForm(Tableau::class,$tableau);
+        $form = $this->createForm(TableauType::class,$tableau);
         $form->remove('createdAt');
         $form->remove('updatedAt');
 
@@ -108,5 +175,62 @@ class BoardController extends AbstractController
                 'form' => $form->createView()
             ]);
         }
+    }
+
+
+    #[Route('/remove/{id<\d+>}', name: 'adm.board.remove')]
+    public function removeBoard(ManagerRegistry $doctrine,$id) : RedirectResponse
+    {
+        $entityManager = $doctrine->getManager();
+
+        $tableau = $entityManager->getRepository(Tableau::class)->find($id);
+
+        if($tableau)
+        {
+            $entityManager->remove($tableau);
+            $entityManager->flush();
+
+            $this->addFlash('success', "La tableau a été supprimé avec succès");
+        }
+        else
+        {
+            $this->addFlash('error', "La tableau est innexistante");
+        }
+
+        return $this->redirectToRoute('adm.board');
+    }
+
+
+    #[Route('/{id<\d+>}',name:'adm.board.detail')]
+    public function detail(ManagerRegistry $doctrine, $id) : Response
+    {
+        $repository = $doctrine->getRepository(Tableau::class);
+
+        $tableau = $repository->find($id);
+
+        if(!$tableau)
+        {
+            return $this->redirectToRoute('adm.board');
+        }
+        return $this->render('board/detail.html.twig', [
+            'tableau' => $tableau
+        ]);
+    }
+
+
+    #[Route('/userBoard',name:'adm.board.userBoard')]
+    public function userMe(ManagerRegistry $doctrine,$id ,Security $security) : Response
+    {
+        $token = $security->getToken();
+        if ($token !== null) {
+            // Récupération de l'utilisateur connecté
+            $user = $token->getUser();
+            $roles = $user->getRoles();
+            dd($user);
+
+        }
+
+        return  $this->redirectToRoute();
+
     }
 }

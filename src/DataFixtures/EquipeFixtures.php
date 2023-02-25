@@ -2,19 +2,17 @@
 
 namespace App\DataFixtures;
 
-use App\Entity\Role;
+use App\Entity\Equipe;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 
-class RoleFixtures extends Fixture
+class EquipeFixtures extends Fixture
 {
     public function load(ObjectManager $manager): void
     {
-        $rolesName = ['developer', 'apprentice' ,'Lead', 'Admin'];
+        //$equipe = new Equipe();
+        // $manager->persist($product);
 
-
-
-
-        //$manager->flush();
+        $manager->flush();
     }
 }

@@ -18,22 +18,23 @@ class TableauType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
 
-
         $builder
             ->add('name')
             //->add('lead',UserType::class)
-            ->add('Lead', EntityType::class, [
+            ->add('lead', EntityType::class, [
                 'class' => Personne::class,
-                'choice_label' => 'name',
+                'choice_label' => 'firstname',
                 'placeholder' => 'Select Lead',
+                'required'=>'true',
                 'query_builder' => function (EntityRepository $er) {
                     return $er->createQueryBuilder('r')
                         ->where('r.role = :role_id')
                         ->setParameter('role_id', 3);
-                },
+                }
             ])
             ->add('Soumettre', SubmitType::class)
         ;
+
     }
 
     public function configureOptions(OptionsResolver $resolver): void

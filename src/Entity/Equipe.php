@@ -24,24 +24,22 @@ class Equipe
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $description = null;
 
-    #[ORM\Column(length: 30, nullable: true)]
-    private ?string $status = null;
 
-    #[ORM\OneToMany(mappedBy: 'equipe', targetEntity: Personne::class)]
-    private Collection $chef;
-
-    #[ORM\OneToMany(mappedBy: 'equipe', targetEntity: Personne::class)]
-    private Collection $membres;
 
 
 
     #[ORM\OneToOne(inversedBy: 'equipe', cascade: ['persist', 'remove'])]
-    private ?Projet $projet = null;
+    private ?Tableau $tableau = null;
+
+    #[ORM\OneToOne(mappedBy: 'equipe', cascade: ['persist', 'remove'])]
+    private ?Lead $lead = null;
+
+    #[ORM\OneToMany(mappedBy: 'equipe', targetEntity: Dev::class)]
+    private Collection $devs;
 
     public function __construct()
     {
-        $this->chef = new ArrayCollection();
-        $this->membres = new ArrayCollection();
+        $this->devs = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -73,86 +71,76 @@ class Equipe
         return $this;
     }
 
-    public function getStatus(): ?string
+
+
+
+
+
+
+
+
+
+
+    public function getTableau(): ?tableau
     {
-        return $this->status;
+        return $this->tableau;
     }
 
-    public function setStatus(?string $status): self
+    public function setTableau(?tableau $tableau): self
     {
-        $this->status = $status;
+        $this->tableau = $tableau;
+
+        return $this;
+    }
+
+    public function getLead(): ?Lead
+    {
+        return $this->lead;
+    }
+
+    public function setLead(?Lead $lead): self
+    {
+        // unset the owning side of the relation if necessary
+        if ($lead === null && $this->lead !== null) {
+            $this->lead->setEquipe(null);
+        }
+
+        // set the owning side of the relation if necessary
+        if ($lead !== null && $lead->getEquipe() !== $this) {
+            $lead->setEquipe($this);
+        }
+
+        $this->lead = $lead;
 
         return $this;
     }
 
     /**
-     * @return Collection<int, Personne>
+     * @return Collection<int, Dev>
      */
-    public function getChef(): Collection
+    public function getDevs(): Collection
     {
-        return $this->chef;
+        return $this->devs;
     }
 
-    public function addChef(Personne $chef): self
+    public function addDev(Dev $dev): self
     {
-        if (!$this->chef->contains($chef)) {
-            $this->chef->add($chef);
-            $chef->setEquipe($this);
+        if (!$this->devs->contains($dev)) {
+            $this->devs->add($dev);
+            $dev->setEquipe($this);
         }
 
         return $this;
     }
 
-    public function removeChef(Personne $chef): self
+    public function removeDev(Dev $dev): self
     {
-        if ($this->chef->removeElement($chef)) {
+        if ($this->devs->removeElement($dev)) {
             // set the owning side to null (unless already changed)
-            if ($chef->getEquipe() === $this) {
-                $chef->setEquipe(null);
+            if ($dev->getEquipe() === $this) {
+                $dev->setEquipe(null);
             }
         }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Personne>
-     */
-    public function getMembres(): Collection
-    {
-        return $this->membres;
-    }
-
-    public function addMembre(Personne $membre): self
-    {
-        if (!$this->membres->contains($membre)) {
-            $this->membres->add($membre);
-            $membre->setEquipe($this);
-        }
-
-        return $this;
-    }
-
-    public function removeMembre(Personne $membre): self
-    {
-        if ($this->membres->removeElement($membre)) {
-            // set the owning side to null (unless already changed)
-            if ($membre->getEquipe() === $this) {
-                $membre->setEquipe(null);
-            }
-        }
-
-        return $this;
-    }
-
-    public function getProjet(): ?Projet
-    {
-        return $this->projet;
-    }
-
-    public function setProjet(?Projet $projet): self
-    {
-        $this->projet = $projet;
 
         return $this;
     }

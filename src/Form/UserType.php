@@ -19,6 +19,7 @@ class UserType extends AbstractType
             ->add('createdAt')
             ->add('updatedAt')
             ->add('role')
+            ->add('equipe')
             ->add('Submit',SubmitType::class)
         ;
     }

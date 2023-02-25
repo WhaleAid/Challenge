@@ -8,13 +8,9 @@
     <title>Document</title>
 </head>
 <body>
-{{ form_start(form) }}
-<div>
-    <div> {{ form_row(form.name) }}</div>
-
-</div>
-
-
-{{ form_rest(form) }}
+    <h2>Détails du User d'id {{ tableau.id }} : </h2>
+    <p>ID Tableau : {{ tableau.id}} </p>
+    <p>Nom Tableau {{ tableau.name }}</p>
+    <p>Lead :  {{ tableau.lead.firstname }} {{ tableau.lead.name }} (Role : {{ tableau.lead.role}}) </p>
 </body>
 </html>

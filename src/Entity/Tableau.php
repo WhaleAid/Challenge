@@ -2,14 +2,18 @@
 
 namespace App\Entity;
 
-use App\Repository\PersonneRepository;
+
 use App\Repository\TableauRepository;
 use App\Traits\TimeStampTrait;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: TableauRepository::class)]
 
+
+#[ORM\Entity(repositoryClass: TableauRepository::class)]
 #[ORM\Table('`tableau`')]
+#[ORM\HasLifecycleCallbacks]
 class Tableau
 {
     use TimeStampTrait;
@@ -19,46 +23,42 @@ class Tableau
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\OneToOne(mappedBy: 'tableau', cascade: ['persist', 'remove'])]
-    private ?Projet $projet = null;
+
 
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
+    #[ORM\OneToOne(mappedBy: 'tableau', cascade: ['persist', 'remove'])]
+    private ?Equipe $equipe = null;
+
+    #[ORM\OneToMany(mappedBy: 'tableau', targetEntity: Dev::class)]
+    private Collection $devs;
+
+    #[ORM\OneToOne(mappedBy: 'tableau', cascade: ['persist', 'remove'])]
+    private ?Lead $lead = null;
+
+    #[ORM\ManyToOne(inversedBy: 'tableau')]
+    private ?Manager $manager = null;
+
+    #[ORM\OneToMany(mappedBy: 'tableau', targetEntity: Tache::class)]
+    private Collection $taches;
+
+    public function __construct()
+    {
+        $this->devs = new ArrayCollection();
+        $this->taches = new ArrayCollection();
+    }
 
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Personne::class, inversedBy="tableaux")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private ?personne $lead = null;
+
+
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getProjet(): ?Projet
-    {
-        return $this->projet;
-    }
 
-    public function setProjet(?Projet $projet): self
-    {
-        // unset the owning side of the relation if necessary
-        if ($projet === null && $this->projet !== null) {
-            $this->projet->setTableau(null);
-        }
-
-        // set the owning side of the relation if necessary
-        if ($projet !== null && $projet->getTableau() !== $this) {
-            $projet->setTableau($this);
-        }
-
-        $this->projet = $projet;
-
-        return $this;
-    }
 
     public function getName(): ?string
     {
@@ -72,15 +72,121 @@ class Tableau
         return $this;
     }
 
-    public function getLead(): ?personne
+    public function getEquipe(): ?Equipe
+    {
+        return $this->equipe;
+    }
+
+    public function setEquipe(?Equipe $equipe): self
+    {
+        // unset the owning side of the relation if necessary
+        if ($equipe === null && $this->equipe !== null) {
+            $this->equipe->setTableau(null);
+        }
+
+        // set the owning side of the relation if necessary
+        if ($equipe !== null && $equipe->getTableau() !== $this) {
+            $equipe->setTableau($this);
+        }
+
+        $this->equipe = $equipe;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Dev>
+     */
+    public function getDevs(): Collection
+    {
+        return $this->devs;
+    }
+
+    public function addDev(Dev $dev): self
+    {
+        if (!$this->devs->contains($dev)) {
+            $this->devs->add($dev);
+            $dev->setTableau($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDev(Dev $dev): self
+    {
+        if ($this->devs->removeElement($dev)) {
+            // set the owning side to null (unless already changed)
+            if ($dev->getTableau() === $this) {
+                $dev->setTableau(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getLead(): ?Lead
     {
         return $this->lead;
     }
 
-    public function setLead(?personne $lead): self
+    public function setLead(?Lead $lead): self
     {
+        // unset the owning side of the relation if necessary
+        if ($lead === null && $this->lead !== null) {
+            $this->lead->setTableau(null);
+        }
+
+        // set the owning side of the relation if necessary
+        if ($lead !== null && $lead->getTableau() !== $this) {
+            $lead->setTableau($this);
+        }
+
         $this->lead = $lead;
 
         return $this;
     }
+
+    public function getManager(): ?Manager
+    {
+        return $this->manager;
+    }
+
+    public function setManager(?Manager $manager): self
+    {
+        $this->manager = $manager;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Tache>
+     */
+    public function getTaches(): Collection
+    {
+        return $this->taches;
+    }
+
+    public function addTach(Tache $tach): self
+    {
+        if (!$this->taches->contains($tach)) {
+            $this->taches->add($tach);
+            $tach->setTableau($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTach(Tache $tach): self
+    {
+        if ($this->taches->removeElement($tach)) {
+            // set the owning side to null (unless already changed)
+            if ($tach->getTableau() === $this) {
+                $tach->setTableau(null);
+            }
+        }
+
+        return $this;
+    }
+
+
 }
