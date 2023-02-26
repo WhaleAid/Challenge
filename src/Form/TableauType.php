@@ -2,8 +2,7 @@
 
 namespace App\Form;
 
-use App\Entity\Personne;
-use App\Entity\Role;
+use App\Entity\Lead;
 use App\Entity\Tableau;
 use App\Entity\User;
 use Doctrine\ORM\EntityRepository;
@@ -22,15 +21,10 @@ class TableauType extends AbstractType
             ->add('name')
             //->add('lead',UserType::class)
             ->add('lead', EntityType::class, [
-                'class' => Personne::class,
+                'class' => Lead::class,
                 'choice_label' => 'firstname',
                 'placeholder' => 'Select Lead',
-                'required'=>'true',
-                'query_builder' => function (EntityRepository $er) {
-                    return $er->createQueryBuilder('r')
-                        ->where('r.role = :role_id')
-                        ->setParameter('role_id', 3);
-                }
+                'required'=>'true'
             ])
             ->add('Soumettre', SubmitType::class)
         ;

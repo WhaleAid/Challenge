@@ -12,7 +12,7 @@
     <ul>
         {{ dump(tableaus) }}
         {% for tab in tableaus %}
-            <li> id du tableau : {{ tab.id}} | Nom du Tableau : {{ tab.name }} | Nom Du projet : {{ tab.projet }} | Lead Projet : {{ tab.lead.firstname}} {{ tab.lead.name}}
+            <li> id du tableau : {{ tab.id}} | Nom du Tableau : {{ tab.name }}  | Lead Projet :
                 <a href="{{ path('adm.board.detail', {id: tab.id}) }}">Details</a>
                 <a href="{{ path('adm.board.remove', {id: tab.id}) }}">Remove</a>
                 <a href="{{ path('adm.board.edit', {id: tab.id}) }}">Edit</a>
