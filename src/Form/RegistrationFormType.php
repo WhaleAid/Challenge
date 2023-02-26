@@ -23,11 +23,17 @@ class RegistrationFormType extends AbstractType
     {
         $builder
             ->add('name', TextType::class, [
+                'attr' => [
+                    'placeholder' => 'Last Name',
+                ],
                 'constraints' => [
                     new NotBlank(['message' => 'Le champ name est obligatoire.'])
                 ]
             ])
             ->add('firstname', TextType::class, [
+                'attr' => [
+                    'placeholder' => 'First Name'
+                ],
                 'constraints' => [
                     new NotBlank(['message' => 'Le champ Firstname est obligatoire.'])
                 ]

@@ -202,15 +202,16 @@ class BoardController extends AbstractController
 
         $tableau = $repository->find($id);
 
-        if(!$tableau)
-        {
-            return $this->redirectToRoute('adm.board');
-        }
         return $this->render('board/detail.html.twig', [
             'tableau' => $tableau
         ]);
     }
 
+    #[Route('/no-board',name:'no-board')]
+    public function noBoard(ManagerRegistry $doctrine) : Response
+    {
+        return $this->render('board/detail.html.twig');
+    }
 
     #[Route('/userBoard',name:'adm.board.userBoard')]
     public function userMe(ManagerRegistry $doctrine,$id ,Security $security) : Response

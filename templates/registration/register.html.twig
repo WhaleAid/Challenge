@@ -21,6 +21,8 @@
 
       {{ form_start(registrationForm) }}
       <div class="register-form">
+        <div class="register-field">{{ form_row(registrationForm.name, { errors: false }) }}</div>
+        <div class="register-field">{{ form_row(registrationForm.firstname, { errors: false }) }}</div>
         <div class="register-field">{{ form_row(registrationForm.email, { errors: false }) }}</div>
         <div class="register-password">
           <div class="register-field">{{ form_row(registrationForm.plainPassword, { label: 'Password', attr: { placeholder: 'Password' }, errors: false }) }}</div>

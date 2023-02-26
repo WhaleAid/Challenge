@@ -1,16 +1,90 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    {{ encore_entry_link_tags('app') }}
     <title>Document</title>
-</head>
-<body>
-    <h2>Détails du User d'id {{ tableau.id }} : </h2>
-    <p>ID Tableau : {{ tableau.id}} </p>
-    <p>Nom Tableau {{ tableau.name }}</p>
-    <p>Lead :  {{ tableau.lead.firstname }} {{ tableau.lead.name }} (Role : {{ tableau.lead.role}}) </p>
-</body>
+  </head>
+  <body class="flex gap-2 justify-between items-center">
+    <div class="sidebar">
+      <div class="sidebar_header flex flex-col justify-center items-center">
+        <div class="logo_header">
+          <h1>DELTASK</h1>
+        </div>
+        <div class="sidebar__menu">
+          {% if 'ROLE_ADMIN' in app.user.roles or 'ROLE_MANAGER' in app.user.roles %}
+            <select name="boards" id="boards">
+              <option value=""></option>
+            </select>
+          {% else %}
+            <h2 class="font-bold text-xl bg-slate-300 px-12 py-2 rounded-xl">Dashboard</h2>
+          {% endif %}
+        </div>
+      </div>
+      <div class="sidbar_menu_items px-4 py-2 bg-white w-full rounded-xl">
+        <a href="profile.php" class="sidebar_menu flex gap-2 items-center">
+          <i class="fa-solid fa-user"></i>
+          Profile
+        </a>
+      </div>
+      <div class="sidebar_profile flex flex-col justify-center items-center gap-4">
+        <div class="sidebar_profile__info flex items-center justify-center gap-2">
+          <img class="rounded-full w-10 h-10" src="https://www.gravatar.com/avatar/205e460b479e2e5b48aea07710c08d50" alt="" />
+          <h3>{{ app.user.name }} {{ app.user.firstname }}</h3>
+        </div>
+        <a class="text-center text-white flex gap-3 items-center sidebar_profile__logout bg-red-500 px-4 py-2 rounded-xl" href="{{ path('app_logout') }}"><i class="fa-solid fa-power-off"></i>Logout</a>
+      </div>
+    </div>
+    <div class="board-wrapper">
+      <div class="board-content">
+        {% if 'ROLE_MANAGER' in app.user.roles %}
+          <div class="board">
+            <div class="board__header">
+              <h1 class="board__title">Tableau de {{ app.user.name }} {{ app.user.firstname }}</h1>
+            </div>
+            <div class="board__content">
+              <div class="board__content__left">
+                <div class="board__content__left__header">
+                  <h2 class="board__content__left__title">Liste des tâches</h2>
+                </div>
+                <div class="board__content__left__body">
+                  <div class="board__content__left__body__task">
+                    <div class="board__content__left__body__task__header">
+                      <h3 class="board__content__left__body__task__title">Tâche 1</h3>
+                      <div class="board__content__left__body__task__header__actions">
+                        <i class="fa-solid fa-edit"></i>
+                        <i class="fa-solid fa-trash"></i>
+                      </div>
+                    </div>
+                    <div class="board__content__left__body__task__body">
+                      <p class="board__content__left__body__task__description">Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quae.</p>
+                    </div>
+                  </div>
+                  <div class="board__content__left__body__task">
+                    <div class="board__content__left__body__task__header">
+                      <h3 class="board__content__left__body__task__title">Tâche 2</h3>
+                      <div class="board__content__left__body__task__header__actions">
+                        <i class="fa-solid fa-edit"></i>
+                        <i class="fa-solid fa-trash"></i>
+                      </div>
+                    </div>
+                    <div class="board__content__left__body__task__body">
+                      <p class="board__content__left__body__task__description">Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quae.</p>
+                    </div>
+                  </div>
+                  <div class="board__content__left__body__task">
+                    <div class="board__content__left__body__task__header">
+                      <h3 class="board__
+        {% else %}
+          <div class="no-board">
+            <div class="no-board_wrapper">
+              <h1>Vous n'êtes pas encore assigné(e) à un tableau</h1>
+            </div>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </body>
 </html>

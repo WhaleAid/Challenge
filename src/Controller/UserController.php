@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-use App\Entity\Personne;
+use App\Entity\Lead;
 use App\Entity\Role;
 use App\Entity\User;
 use App\Form\UserType;
@@ -12,6 +12,7 @@ use App\Services\SendinblueMailer;
 use Doctrine\Persistence\ManagerRegistry;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -28,19 +29,23 @@ class UserController extends AbstractController
     }
 
     #[Route('/', name: 'user.list')]
+    /**
+     * @IsGranted("ROLE_MANAGER")
+     *
+     */
     public function index(ManagerRegistry $doctrine): Response
     {
         $repository = $doctrine->getRepository(User::class);
 
         $users = $repository->findAll();
         return $this->render('user/index.html.twig', [
-            'users' => $users
+            'users' => $users,
         ]);
     }
 
     #[Route('/alls/{page?1}/{nbre?12}', name: 'user.list.alls')]
     /**
-     * @IsGranted("ROLE_USER")
+     * @IsGranted("ROLE_MANAGER")
      *
      */
     public function indexAlls(ManagerRegistry $doctrine, $page, $nbre): Response
@@ -51,7 +56,7 @@ class UserController extends AbstractController
 
         //echo $this->helpers->sayHello();
 
-        $users = $repository->findBy([], [],$nbre,($page - 1) * $nbre);
+        $users = $repository->findBy([], [], $nbre, ($page - 1) * $nbre);
 
         //dd($users);
         return $this->render('user/index.html.twig', [
@@ -67,7 +72,7 @@ class UserController extends AbstractController
     #[Route('/alls/age/{ageMin}/{ageMax}', name: 'user.list.alls.ageInterval')]
     public function indexAllsByAge(ManagerRegistry $doctrine, $ageMin, $ageMax): Response
     {
-        $repository = $doctrine->getRepository(Personne::class);
+        $repository = $doctrine->getRepository(User::class);
         $users = $repository->finduserByAgeInterval($ageMin, $ageMax);
 
         return $this->render('user/ageInterval.html.twig', ['users' => $users]);
@@ -77,7 +82,7 @@ class UserController extends AbstractController
     #[Route('/stats/age/{ageMin}/{ageMax}', name: 'user.list.stats.ageInterval')]
     public function indexStatsByAge(ManagerRegistry $doctrine, $ageMin, $ageMax): Response
     {
-        $repository = $doctrine->getRepository(Personne::class);
+        $repository = $doctrine->getRepository(User::class);
         $stats = $repository->statsUserByAgeInterval($ageMin, $ageMax);
 
         return $this->render('user/statsAgeInterval.html.twig', [
@@ -92,7 +97,7 @@ class UserController extends AbstractController
     #[Route('/{id<\d+>}', name: 'user.detail')]
     public function detail(ManagerRegistry $doctrine, $id): Response
     {
-        $repository = $doctrine->getRepository(Personne::class);
+        $repository = $doctrine->getRepository(User::class);
 
         $user = $repository->find($id);
 
@@ -109,7 +114,7 @@ class UserController extends AbstractController
 
 
         $user = new User();
-        $form = $this->createForm(UserType::class,$user);
+        $form = $this->createForm(UserType::class, $user);
         $form->remove('createdAt');
         $form->remove('updatedAt');
         //$form->remove('role');
@@ -152,15 +157,16 @@ class UserController extends AbstractController
 
     #[Route('/edit/{id?0}', name: 'user.edit')]
     public function editUser(
-        Personne $user = null,
+        User $user = null,
         ManagerRegistry $doctrine,
         Request $request,
+        $id
         /*MailerService $mailer*/
     ): Response {
         $new = false;
         if (!$user) {
             $new = true;
-            $user = new Personne();
+            $user = new User();
         }
 
         $form = $this->createForm(UserType::class, $user);
@@ -192,7 +198,7 @@ class UserController extends AbstractController
             return $this->redirectToRoute('user.list.alls');
         } else {
             return $this->render('user/add-user.html.twig', [
-                'form' => $form->createView()
+                'form' => $form->createView(), 'user' => $user
             ]);
         }
 
@@ -221,7 +227,7 @@ class UserController extends AbstractController
     {
         $entityManager = $doctrine->getManager();
 
-        $user = $entityManager->getRepository(Personne::class)->find($id);
+        $user = $entityManager->getRepository(User::class)->find($id);
 
         if ($user) {
             $entityManager->remove($user);
@@ -236,7 +242,7 @@ class UserController extends AbstractController
     }
 
     #[Route('/update/{id}/{firstname}/{name}/{age}', name: 'user.update')]
-    public function updateUser(Personne $user = null, $firstname, $name, $age, ManagerRegistry $doctrine): RedirectResponse
+    public function updateUser(User $user = null, $firstname, $name, $age, ManagerRegistry $doctrine): RedirectResponse
     {
         if ($user) {
             $user->setName($name);

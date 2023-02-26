@@ -1,40 +1,55 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    {{ encore_entry_link_tags('app') }}
     <title>Document</title>
-</head>
-<body>
+  </head>
+  <body class="mx-auto my-10 flex flex-col">
     {#{{ dump(users) }}
     {{ dump(nbrPage) }}#}
-    <h1>Administration</h1>
-    <h2>Liste des users</h2>
-    <ul>
-        {% for user in users %}
-            <li>{{ user.id}} | {{ user.name }} | {{ user.firstname }} | {{ user.email }}
-                <a href="{{ path('user.detail', {id: user.id}) }}">Details</a>
-                <a href="{{ path('user.remove', {id: user.id}) }}">Remove</a>
-                <a href="{{ path('user.edit', {id: user.id}) }}">Edit</a>
-            </li>
-        {% endfor %}
-    </ul>
+    <h1 class="text-center text-[2em]">Administration</h1>
+    <h2 class="text-center text-[1.6em]">Liste des users</h2>
+    <div class="admin-user-list">
+      {% for user in users %}
+        <div class="admin-user">
+          <div class="flex flex-col">
+            <div class="info font-bold font-['Oswald'] text-[1.3em] flex justify-between items-center">
+              <span>ID: {{ user.id }}</span> <span>{{ user.roles[0]|replace({ ROLE_: '' }) }}</span>
+            </div>
+            <div class="info">Last Name : {{ user.name }}</div>
+            <div class="info">First Name: {{ user.firstname }}</div>
+            <div class="info">Email : {{ user.email }}</div>
+          </div>
+          <div class="flex w-full justify-between item-center mt-5">
+            <a class="bg-green-100 border border-green-500 text-green-500 py-2 px-4 font-bold rounded-lg" href="{{ path('user.detail', { id: user.id }) }}">Details</a>
+            <a class="bg-red-100 border border-red-500 text-red-500 py-2 px-4 font-bold rounded-lg" href="{{ path('user.remove', { id: user.id }) }}">Remove</a>
+            <a class="bg-yellow-100 border border-yellow-500 text-yellow-500 py-2 px-4 font-bold rounded-lg" href="{{ path('user.edit', { id: user.id }) }}">Edit</a>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
 
     <ul>
-        {% if page != 1 %}
-            <li><a href="{{ path('user.list.alls', {page : page-1, nbre:nbre}) }}"> Previous</a>  </li>
-        {% endif %}
+      {% if page != 1 %}
+        <li>
+          <a href="{{ path('user.list.alls', { page: page - 1, nbre: nbre }) }}">Previous</a>
+        </li>
+      {% endif %}
 
-        {% for i  in 1..nbrPage %}
-            <li><a href="{{ path('user.list.alls', {page : i, nbre:nbre}) }}">{{ i }}</a>  </li>
-        {% endfor %}
+      {% for i in 1..nbrPage %}
+        <li>
+          <a href="{{ path('user.list.alls', { page: i, nbre: nbre }) }}">{{ i }}</a>
+        </li>
+      {% endfor %}
 
-
-        {% if page != nbrPage %}
-            <li><a href="{{ path('user.list.alls', {page : page+1, nbre:nbre}) }}"> Next</a>  </li>
-        {% endif %}
+      {% if page != nbrPage %}
+        <li>
+          <a href="{{ path('user.list.alls', { page: page + 1, nbre: nbre }) }}">Next</a>
+        </li>
+      {% endif %}
     </ul>
-</body>
+  </body>
 </html>

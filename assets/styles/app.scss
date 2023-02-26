@@ -5,9 +5,13 @@
 @import './scss/login.scss';
 @import './scss/register.scss';
 @import './scss/animations.scss';
+@import './scss/board.scss';
+@import './scss/manager.scss';
+@import './scss/edit-users.scss';
 
 * {
     box-sizing: border-box;
+    font-family: 'Roboto', sans-serif;
 }
 
 html {

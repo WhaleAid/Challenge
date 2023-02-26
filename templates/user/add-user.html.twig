@@ -1,20 +1,24 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    {% block stylesheets %}
+      {{ encore_entry_link_tags('app') }}
+    {% endblock %}
     <title>Document</title>
-</head>
-<body>
+  </head>
+  <body class="flex flex-col justify-center bo-edit-user">
+    <h1 class="font-['Oswald'] font-bold text-[2em] text-[#6167FF] text-center m-auto">Editing user {{ user.name }} {{ user.firstname }}</h1>
     {{ form_start(form) }}
     <div>
-        <div> {{ form_row(form.firstname) }}</div>
-        <div> {{ form_row(form.name) }}</div>
+      <div class="bo-input">{{ form_row(form.firstname) }}</div>
+      <div class="bo-input">{{ form_row(form.name) }}</div>
+        <div class="bo-input">{{ form_row(form.email) }}</div>
+        <div class="bo-input !flex-row">{{ form_row(form.roles) }}</div>
     </div>
 
-
     {{ form_rest(form) }}
-</body>
+  </body>
 </html>
