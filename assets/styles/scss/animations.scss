@@ -1,8 +1,11 @@
-@keyframes MOVE-BG {
-    from {
-      transform: translateX(0);
-    }
-    to { 
-      transform: translateX(-187%);
-    }
- }
+@keyframes error {
+  0% {
+    opacity: 0;
+    transform: translateX(-100px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateX(0px);
+  }
+}

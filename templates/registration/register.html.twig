@@ -1,23 +1,43 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    {% block stylesheets %}
+      {{ encore_entry_link_tags('app') }}
+    {% endblock %}
     <title>Document</title>
-</head>
-<body>
-    <h1>Register</h1>
+  </head>
+  <div class="error">{{ form_errors(registrationForm.email) }}
+    {{ form_errors(registrationForm.plainPassword) }}
+    {{ form_errors(registrationForm.agreeTerms) }}</div>
+  <body class="flex justify-center">
+    <nav class="flex logo">
+      <h1>DELTASK</h1>
+    </nav>
+    <div class="register-wrapper">
+      <h2 class="h3 mb-3 font-weight-normal"><span class="font-bold text-[#4d4dff]">R</span>egister</h2>
 
-    {{ form_start(registrationForm) }}
-    {{ form_row(registrationForm.email) }}
-    {{ form_row(registrationForm.plainPassword, {
-        label: 'Password'
-    }) }}
-    {{ form_row(registrationForm.agreeTerms) }}
+      {{ form_start(registrationForm) }}
+      <div class="register-form">
+        <div class="register-field">{{ form_row(registrationForm.email, { errors: false }) }}</div>
+        <div class="register-password">
+          <div class="register-field">{{ form_row(registrationForm.plainPassword, { label: 'Password', attr: { placeholder: 'Password' }, errors: false }) }}</div>
+        </div>
+        <div class="agree-terms">{{ form_row(registrationForm.agreeTerms, { errors: false }) }}</div>
+        <div class="flex cta-register">
+          <button type="submit" class="btn">Register</button>
+          <a href="/login">Login</a>
+        </div>
+      </div>
 
-    <button type="submit" class="btn">Register</button>
-    {{ form_end(registrationForm) }}
-</body>
+      {{ form_end(registrationForm) }}
+    </div>
+  </body>
+  <footer>
+    <div class="flex justify-center">
+      <p>© 2023 DELTASK</p>
+    </div>
+  </footer>
 </html>

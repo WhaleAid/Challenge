@@ -1,5 +1,78 @@
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 @import './scss/login.scss';
+@import './scss/register.scss';
 @import './scss/animations.scss';
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    height: 100%;
+    margin: 0;
+}
+
+body {
+    height: 100%;
+    margin: 0;
+    overflow: hidden;
+    // background-color: #fffefc;
+    background: url('/assets/images/background.jpeg');
+    background-size: cover;
+}
+
+img {
+    display: block;
+    max-width: 100%;
+}
+
+footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 2.5rem;
+    background-color: #6167FF;
+    color: white;
+    text-align: center;
+    padding: 1em 0;
+    font-size: .8em;
+}
+
+.logo {
+    top: 0;
+    left: 0;
+    position: absolute;
+    margin: 1em;
+
+    h1 {
+        font-family: 'Oswald', sans-serif;
+        font-size: 2em;
+        color: #6167FF;
+        backdrop-filter: blur(5px);
+        padding: 1px 10px;
+    }
+}
+
+.error {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    height: fit-content;
+    width: fit-content;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    ul {
+        text-align: center;
+        border: 1px solid red;
+        background-color: #ffe6e6;
+        color: red;
+        padding: 1em;
+        border-radius: 5px;
+        animation: error .6s ease-in-out;
+    }
+}

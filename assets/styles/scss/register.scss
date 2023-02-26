@@ -1,0 +1,103 @@
+.register-wrapper {
+    margin: auto;
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    gap: 1em;
+
+    .register-form {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        // gap: 1em;
+
+        .register-field {
+            label {
+                display: none;
+            }
+
+            width: min(90vw, 25em);
+
+            input {
+                padding: 5px 1em;
+                margin: .5em 1em;
+                width: 60%;
+                border-radius: 5px;
+                background-color: #eee;
+                color: rgb(57, 57, 57);
+            }
+        }
+
+        .agree-terms {
+            //   background-color: #4d4dff;
+            width: 70%;
+            text-align: center;
+            margin-top: .5em;
+            margin-bottom: 1em;
+
+            >div {
+                display: flex;
+                flex-direction: row-reverse;
+                gap: 1em;
+                align-items: center;
+                justify-content: center;
+                margin: 1em 0;
+
+                input {
+                    width: 1em;
+                    height: 1em;
+                }
+
+                label {
+                    font-size: .8em;
+                    color: #4d4dff;
+                    font-weight: bold;
+                }
+            }
+        }
+
+        .cta-register {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 1em;
+
+            button {
+                margin-top: .5em;
+                padding: .5em 1em;
+                border-radius: 5px;
+                color: white;
+                text-align: center;
+                background-color: #6167FF;
+                transition: .3s;
+
+                &:hover {
+                    background-color: #4d4dff;
+                    transition: .3s;
+                }
+            }
+
+            a {
+                margin-top: .5em;
+                padding: .5em 1em;
+                color: #4d4dff;
+                text-align: center;
+                transition: .3s;
+
+                &:hover {
+                    color: #6167FF;
+                    text-decoration: underline;
+                    transition: .3s;
+                }
+            }
+        }
+    }
+
+    h2 {
+        font-size: 2em;
+    }
+}

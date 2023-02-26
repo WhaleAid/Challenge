@@ -28,7 +28,7 @@ class UserController extends AbstractController
     }
 
     #[Route('/', name: 'user.list')]
-    public function index(ManagerRegistry $doctrine) : Response
+    public function index(ManagerRegistry $doctrine): Response
     {
         $repository = $doctrine->getRepository(Personne::class);
 
@@ -43,11 +43,11 @@ class UserController extends AbstractController
      * @IsGranted("ROLE_USER")
      *
      */
-    public function indexAlls(ManagerRegistry $doctrine, $page, $nbre) : Response
+    public function indexAlls(ManagerRegistry $doctrine, $page, $nbre): Response
     {
         $repository = $doctrine->getRepository(User::class);
         $nbUsers = $repository->count([]);
-        $nbrPage = ceil($nbUsers/$nbre) ;
+        $nbrPage = ceil($nbUsers / $nbre);
 
         //echo $this->helpers->sayHello();
 
@@ -65,39 +65,38 @@ class UserController extends AbstractController
 
 
     #[Route('/alls/age/{ageMin}/{ageMax}', name: 'user.list.alls.ageInterval')]
-    public function indexAllsByAge(ManagerRegistry $doctrine, $ageMin, $ageMax) : Response
+    public function indexAllsByAge(ManagerRegistry $doctrine, $ageMin, $ageMax): Response
     {
         $repository = $doctrine->getRepository(Personne::class);
-        $users = $repository->finduserByAgeInterval($ageMin,$ageMax);
+        $users = $repository->finduserByAgeInterval($ageMin, $ageMax);
 
         return $this->render('user/ageInterval.html.twig', ['users' => $users]);
     }
 
 
     #[Route('/stats/age/{ageMin}/{ageMax}', name: 'user.list.stats.ageInterval')]
-    public function indexStatsByAge(ManagerRegistry $doctrine, $ageMin, $ageMax) : Response
+    public function indexStatsByAge(ManagerRegistry $doctrine, $ageMin, $ageMax): Response
     {
         $repository = $doctrine->getRepository(Personne::class);
-        $stats = $repository->statsUserByAgeInterval($ageMin,$ageMax);
+        $stats = $repository->statsUserByAgeInterval($ageMin, $ageMax);
 
         return $this->render('user/statsAgeInterval.html.twig', [
             'stats' => $stats,
             'ageMin' => $ageMin,
-            'ageMax'=> $ageMax
+            'ageMax' => $ageMax
 
         ]);
     }
 
 
-    #[Route('/{id<\d+>}',name:'user.detail')]
-    public function detail(ManagerRegistry $doctrine, $id) : Response
+    #[Route('/{id<\d+>}', name: 'user.detail')]
+    public function detail(ManagerRegistry $doctrine, $id): Response
     {
         $repository = $doctrine->getRepository(Personne::class);
 
         $user = $repository->find($id);
 
-        if(!$user)
-        {
+        if (!$user) {
             return $this->redirectToRoute('user.list');
         }
         return $this->render('user/detail.html.twig', [
@@ -110,25 +109,22 @@ class UserController extends AbstractController
 
 
         $user = new Personne();
-        $form = $this->createForm(UserType::class,$user);
+        $form = $this->createForm(UserType::class, $user);
         $form->remove('createdAt');
         $form->remove('updatedAt');
         //$form->remove('role');
 
         $form->handleRequest($request);
 
-        if($form->isSubmitted())
-        {
+        if ($form->isSubmitted()) {
             $entityManager = $doctrine->getManager();
             $entityManager->persist($user);
             $entityManager->flush();
 
-            $this->addFlash( 'success', $user->getFirstname(). "a été ajouté avec succès");
-           // $this->sendinblueMailer->sendEmail($user->getEmail(),"Enregistrement nouvel utilisateur",content:"Un nouvel utilisateur a été ajouté avec succès" );
+            $this->addFlash('success', $user->getFirstname() . "a été ajouté avec succès");
+            // $this->sendinblueMailer->sendEmail($user->getEmail(),"Enregistrement nouvel utilisateur",content:"Un nouvel utilisateur a été ajouté avec succès" );
             return $this->redirectToRoute('user.list.alls');
-        }
-        else    
-        {
+        } else {
             return $this->render('user/add-user.html.twig', [
                 'form' => $form->createView()
             ]);
@@ -152,59 +148,49 @@ class UserController extends AbstractController
         $entityManager->persist($user);
 
         $entityManager->flush();*/
-
-
-
     }
 
     #[Route('/edit/{id?0}', name: 'user.edit')]
     public function editUser(
-            Personne $user = null ,
-            ManagerRegistry $doctrine,
-            Request $request,
-            /*MailerService $mailer*/
-    ): Response
-    {
+        Personne $user = null,
+        ManagerRegistry $doctrine,
+        Request $request,
+        /*MailerService $mailer*/
+    ): Response {
         $new = false;
-        if(!$user)
-        {
+        if (!$user) {
             $new = true;
             $user = new Personne();
         }
 
-        $form = $this->createForm(UserType::class,$user);
+        $form = $this->createForm(UserType::class, $user);
         $form->remove('createdAt');
         $form->remove('updatedAt');
 
         $form->handleRequest($request);
 
-        if($form->isSubmitted())
-        {
+        if ($form->isSubmitted()) {
             $entityManager = $doctrine->getManager();
             $entityManager->persist($user);
             $entityManager->flush();
 
-            if($new)
-            {
-                $this->addFlash( 'success', $user->getFirstname(). "a été ajouté avec succès");
-                $mailMessage = $user->getFirstname().' '.$user->getName().' a été ajouté avec succes';
-            }
-            else
-            {
-                $this->addFlash( 'success', $user->getFirstname(). "a été édité avec succès");
-                $mailMessage = $user->getFirstname().' '.$user->getName().' a été édité avec succes';
+            if ($new) {
+                $this->addFlash('success', $user->getFirstname() . "a été ajouté avec succès");
+                $mailMessage = $user->getFirstname() . ' ' . $user->getName() . ' a été ajouté avec succes';
+            } else {
+                $this->addFlash('success', $user->getFirstname() . "a été édité avec succès");
+                $mailMessage = $user->getFirstname() . ' ' . $user->getName() . ' a été édité avec succes';
             }
 
             //$mailer->sendEmail(content: $mailMessage);
 
-            $this->sendinblueMailer->sendEmail("idirwalidhakim32@gmail.com",
+            $this->sendinblueMailer->sendEmail(
+                "idirwalidhakim32@gmail.com",
                 "Test Challenge",
                 "<p>hello </p>"
             );
             return $this->redirectToRoute('user.list.alls');
-        }
-        else
-        {
+        } else {
             return $this->render('user/add-user.html.twig', [
                 'form' => $form->createView()
             ]);
@@ -228,38 +214,31 @@ class UserController extends AbstractController
         $entityManager->persist($user);
 
         $entityManager->flush();*/
-
-
-
     }
 
     #[Route('/remove/{id<\d+>}', name: 'user.remove')]
-    public function removeUser(ManagerRegistry $doctrine,$id) : RedirectResponse
+    public function removeUser(ManagerRegistry $doctrine, $id): RedirectResponse
     {
         $entityManager = $doctrine->getManager();
 
         $user = $entityManager->getRepository(Personne::class)->find($id);
 
-        if($user)
-        {
+        if ($user) {
             $entityManager->remove($user);
             $entityManager->flush();
 
             $this->addFlash('success', "La personne a été supprimé avec succès");
-        }
-        else
-        {
+        } else {
             $this->addFlash('error', "La personne est innexistante");
         }
 
         return $this->redirectToRoute('user.list.alls');
     }
 
-    #[Route('/update/{id}/{firstname}/{name}/{age}',name :'user.update')]
-    public function updateUser(Personne $user = null,$firstname ,$name,$age, ManagerRegistry $doctrine) : RedirectResponse
+    #[Route('/update/{id}/{firstname}/{name}/{age}', name: 'user.update')]
+    public function updateUser(Personne $user = null, $firstname, $name, $age, ManagerRegistry $doctrine): RedirectResponse
     {
-        if($user)
-        {
+        if ($user) {
             $user->setName($name);
             $user->setFirstname($firstname);
             $user->setAge($age);
@@ -267,14 +246,20 @@ class UserController extends AbstractController
             $doctrine->getManager()->persist($user);
             $doctrine->getManager()->flush();
 
-            $this->addFlash('success' , "Le user a été mis a jour");
-
-        }
-        else
-        {
+            $this->addFlash('success', "Le user a été mis a jour");
+        } else {
             $this->addFlash('error', "La personne est innexistante");
         }
 
         return $this->redirectToRoute('user.list.alls');
+    }
+
+    public function isSignedIn()
+    {
+        if ($this->getUser()) {
+            return $this->redirectToRoute('admin.index');
+        } else {
+            return $this->redirectToRoute('user.index');
+        }
     }
 }

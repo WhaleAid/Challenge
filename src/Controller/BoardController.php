@@ -4,7 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Tableau;
 use App\Form\TableauType;
-use App\Entity\Personne;
+use App\Entity\User;
 use Doctrine\Persistence\ManagerRegistry;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -54,9 +54,9 @@ class BoardController extends AbstractController
             //dd($form->get('Lead')->getData());
 
             /*$lead = $form->get('lead')->getData();
-            $lead_personne = new Personne();
+            $lead_User = new User();
 
-            if ($lead instanceof Personne) {
+            if ($lead instanceof User) {
                 //dd($lead);
                 $tableau->setLead($form->get('lead')->getData());
             }*/
@@ -95,7 +95,7 @@ class BoardController extends AbstractController
         $form = $this->createFormBuilder($tableau)
             ->add('name')
             ->add('lead', ChoiceType::class, [
-                'choices' => $this->doctrine->getRepository(Personne::class)->findAll(),
+                'choices' => $this->doctrine->getRepository(User::class)->findAll(),
                 'choice_label' => 'name', // remplacer 'nom' par le champ que vous souhaitez afficher dans la liste déroulante
                 'placeholder' => 'Sélectionner une personne', // facultatif: affiche un choix vide au début de la liste déroulante
             ])
@@ -110,7 +110,7 @@ class BoardController extends AbstractController
             //dd($lead);
 
 
-            if ($lead instanceof Personne) {
+            if ($lead instanceof User) {
                 //dd($lead);
                 $tableau->setLead($lead);
 
