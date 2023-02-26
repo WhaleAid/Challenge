@@ -2,8 +2,6 @@
 
 namespace App\Controller;
 
-use App\Entity\Personne;
-use App\Entity\Role;
 use App\Entity\User;
 use App\Form\UserType;
 use App\Services\Helpers;
@@ -67,7 +65,7 @@ class UserController extends AbstractController
     #[Route('/alls/age/{ageMin}/{ageMax}', name: 'user.list.alls.ageInterval')]
     public function indexAllsByAge(ManagerRegistry $doctrine, $ageMin, $ageMax) : Response
     {
-        $repository = $doctrine->getRepository(Personne::class);
+        $repository = $doctrine->getRepository(User::class);
         $users = $repository->finduserByAgeInterval($ageMin,$ageMax);
 
         return $this->render('user/ageInterval.html.twig', ['users' => $users]);
@@ -77,7 +75,7 @@ class UserController extends AbstractController
     #[Route('/stats/age/{ageMin}/{ageMax}', name: 'user.list.stats.ageInterval')]
     public function indexStatsByAge(ManagerRegistry $doctrine, $ageMin, $ageMax) : Response
     {
-        $repository = $doctrine->getRepository(Personne::class);
+        $repository = $doctrine->getRepository(User::class);
         $stats = $repository->statsUserByAgeInterval($ageMin,$ageMax);
 
         return $this->render('user/statsAgeInterval.html.twig', [
@@ -92,7 +90,7 @@ class UserController extends AbstractController
     #[Route('/{id<\d+>}',name:'user.detail')]
     public function detail(ManagerRegistry $doctrine, $id) : Response
     {
-        $repository = $doctrine->getRepository(Personne::class);
+        $repository = $doctrine->getRepository(User::class);
 
         $user = $repository->find($id);
 
@@ -159,7 +157,7 @@ class UserController extends AbstractController
 
     #[Route('/edit/{id?0}', name: 'user.edit')]
     public function editUser(
-            Personne $user = null ,
+            User $user = null ,
             ManagerRegistry $doctrine,
             Request $request,
             /*MailerService $mailer*/
@@ -169,7 +167,7 @@ class UserController extends AbstractController
         if(!$user)
         {
             $new = true;
-            $user = new Personne();
+            $user = new User();
         }
 
         $form = $this->createForm(UserType::class,$user);
@@ -238,7 +236,7 @@ class UserController extends AbstractController
     {
         $entityManager = $doctrine->getManager();
 
-        $user = $entityManager->getRepository(Personne::class)->find($id);
+        $user = $entityManager->getRepository(User::class)->find($id);
 
         if($user)
         {
@@ -256,13 +254,13 @@ class UserController extends AbstractController
     }
 
     #[Route('/update/{id}/{firstname}/{name}/{age}',name :'user.update')]
-    public function updateUser(Personne $user = null,$firstname ,$name,$age, ManagerRegistry $doctrine) : RedirectResponse
+    public function updateUser(User $user = null,$firstname ,$name,$age, ManagerRegistry $doctrine) : RedirectResponse
     {
         if($user)
         {
             $user->setName($name);
             $user->setFirstname($firstname);
-            $user->setAge($age);
+
 
             $doctrine->getManager()->persist($user);
             $doctrine->getManager()->flush();

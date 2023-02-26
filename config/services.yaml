@@ -49,3 +49,7 @@ services:
         arguments:
             
             $sendinblueApiKey: '%env(resolve:SENDINBLUE_API_KEY)%'
+
+    App\EventListener\RegistrationSuccessListener:
+        tags:
+            - { name: kernel.event_listener, event: App\EventListener\RegistrationSuccessEvent }

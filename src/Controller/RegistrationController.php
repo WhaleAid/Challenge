@@ -43,7 +43,7 @@ class RegistrationController extends AbstractController
                     $form->get('plainPassword')->getData()
                 )
             );
-
+            $user->setConfirmationToken(uniqid());
             $entityManager->persist($user);
             $entityManager->flush();
             $subject = 'Welcome to My Website';
