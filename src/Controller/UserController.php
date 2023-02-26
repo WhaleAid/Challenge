@@ -10,6 +10,7 @@ use App\Services\Helpers;
 use App\Services\MailerService;
 use App\Services\SendinblueMailer;
 use Doctrine\Persistence\ManagerRegistry;
+use phpDocumentor\Reflection\Types\Array_;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -173,13 +174,15 @@ class UserController extends AbstractController
         $form->remove('createdAt');
         $form->remove('updatedAt');
 
+        //dd($form);
         $form->handleRequest($request);
 
         if ($form->isSubmitted()) {
             $entityManager = $doctrine->getManager();
             $entityManager->persist($user);
             $entityManager->flush();
-
+            $temp = Array();
+            $temp =$form->get('roles')->getData();
             if ($new) {
                 $this->addFlash('success', $user->getFirstname() . "a été ajouté avec succès");
                 $mailMessage = $user->getFirstname() . ' ' . $user->getName() . ' a été ajouté avec succes';
@@ -196,10 +199,11 @@ class UserController extends AbstractController
                 "<p>hello </p>"
             );
             return $this->redirectToRoute('user.list.alls');
-        } else {
-            return $this->render('user/add-user.html.twig', [
-                'form' => $form->createView(), 'user' => $user
-            ]);
+            }
+            else {
+                return $this->render('user/add-user.html.twig', [
+                    'form' => $form->createView(), 'user' => $user
+                ]);
         }
 
         /*$user = new User();

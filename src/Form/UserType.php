@@ -51,9 +51,10 @@ class UserType extends AbstractType
                     return $key;
                 },
                 'placeholder' => 'Sélectionner un rôle',
-                'multiple' => false,
+                'multiple' => true,
                 'expanded' => true,
-                'data' => (string) $options['data']->getRoles()[0],
+
+                /*'data' => reset($options['data']->getRoles()),*/
             ])
             ->add('createdAt')
             ->add('updatedAt')

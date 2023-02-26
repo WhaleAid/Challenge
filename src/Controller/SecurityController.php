@@ -17,9 +17,9 @@ class SecurityController extends AbstractController
     public function login(AuthenticationUtils $authenticationUtils, Security $security): Response | RedirectResponse
     {
         if ($security->isGranted('ROLE_MANAGER')) {
-            return new RedirectResponse($this->generateUrl('user.list.all'));
+            return new RedirectResponse($this->generateUrl('user.list.alls'));
         } else if ( $security->isGranted('ROLE_DEV')) {
-            return new RedirectResponse($this->generateUrl('no-board'));
+            return new RedirectResponse($this->generateUrl('adm.tableau.detail', ['id' => 1]));
         }
 
         // get the login error if there is one

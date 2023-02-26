@@ -34,7 +34,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $username = null;*/
 
     #[ORM\Column]
-    private array $roles = ['ROLE_USER'];
+    private array $roles = ['ROLE_DEV'];
 
     /**
      * @var string The hashed password
@@ -57,9 +57,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'commenter', targetEntity: Comment::class)]
     private Collection $comments;
 
+    #[ORM\ManyToMany(targetEntity: Tableau::class, mappedBy: 'user_id')]
+    private Collection $tableaus;
+
     public function __construct()
     {
         $this->comments = new ArrayCollection();
+        $this->tableaus = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -210,6 +214,33 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             if ($comment->getCommenter() === $this) {
                 $comment->setCommenter(null);
             }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Tableau>
+     */
+    public function getTableaus(): Collection
+    {
+        return $this->tableaus;
+    }
+
+    public function addTableau(Tableau $tableau): self
+    {
+        if (!$this->tableaus->contains($tableau)) {
+            $this->tableaus->add($tableau);
+            $tableau->addUserId($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTableau(Tableau $tableau): self
+    {
+        if ($this->tableaus->removeElement($tableau)) {
+            $tableau->removeUserId($this);
         }
 
         return $this;

@@ -54,12 +54,14 @@ class LoginAuthenticator extends AbstractLoginFormAuthenticator
             // Récupération de l'utilisateur connecté
             $user = $token->getUser();
             $roles = $user->getRoles();
-            if (in_array('ROLE_ADMIN', $roles)) {
+            if (in_array('ROLE_MANAGER', $roles)) {
                 return new RedirectResponse($this->urlGenerator->generate('user.list.alls'));
+            } else {
+                return new RedirectResponse($this->urlGenerator->generate('adm.tableau.detail'));
             }
 
         }
-        return new RedirectResponse($this->urlGenerator->generate('adm.board.detail', ['id' => 1]));
+        return new RedirectResponse($this->urlGenerator->generate('adm.tableau.detail', ['id' => 0]));
     }
 
     protected function getLoginUrl(Request $request): string

@@ -43,10 +43,14 @@ class Tableau
     #[ORM\OneToMany(mappedBy: 'tableau', targetEntity: Tache::class)]
     private Collection $taches;
 
+    #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'tableaus')]
+    private Collection $user_id;
+
     public function __construct()
     {
         $this->devs = new ArrayCollection();
         $this->taches = new ArrayCollection();
+        $this->user_id = new ArrayCollection();
     }
 
 
@@ -184,6 +188,30 @@ class Tableau
                 $tach->setTableau(null);
             }
         }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, User>
+     */
+    public function getUserId(): Collection
+    {
+        return $this->user_id;
+    }
+
+    public function addUserId(User $userId): self
+    {
+        if (!$this->user_id->contains($userId)) {
+            $this->user_id->add($userId);
+        }
+
+        return $this;
+    }
+
+    public function removeUserId(User $userId): self
+    {
+        $this->user_id->removeElement($userId);
 
         return $this;
     }

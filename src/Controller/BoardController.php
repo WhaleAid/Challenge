@@ -37,7 +37,8 @@ class BoardController extends AbstractController
             'tableaus' => $tableaux
         ]);
     }
-    #[Route('/add', name: 'adm.board.add')]
+
+    /*#[Route('/add', name: 'adm.board.add')]
     public function addBoard(Request $request): Response
     {
         $entityManager = $this->doctrine->getManager();
@@ -79,7 +80,7 @@ class BoardController extends AbstractController
                 'form' => $form->createView()
             ]);
         }
-    }
+    }*/
 
     #[Route('/ajouter', name: 'adm.board.ajouter')]
     public function nouveauTableau(Request $request)
@@ -109,7 +110,6 @@ class BoardController extends AbstractController
                 $tableau->setLead($lead);
 
             }
-            //dd($tableau);
             $entityManager = $this->doctrine->getManager();
             $entityManager->persist($tableau);
             $entityManager->flush();
