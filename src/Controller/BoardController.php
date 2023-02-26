@@ -2,9 +2,9 @@
 
 namespace App\Controller;
 
+use App\Entity\Lead;
 use App\Entity\Tableau;
 use App\Form\TableauType;
-use App\Entity\Personne;
 use Doctrine\Persistence\ManagerRegistry;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -41,34 +41,28 @@ class BoardController extends AbstractController
     public function addBoard(Request $request): Response
     {
         $entityManager = $this->doctrine->getManager();
-
         $tableau = new Tableau();
-
-        $form = $this->createForm(TableauType::class,$tableau);
-
+        $form = $this->createFormBuilder($tableau)
+            ->add('name')
+            ->add('lead', ChoiceType::class, [
+                'choices' => $this->doctrine->getRepository(Lead::class)->findAll(),
+                'choice_label' => 'name',
+                'placeholder' => 'Sélectionner une personne',
+            ])
+            ->add('enregistrer', SubmitType::class)
+            ->getForm();
+        //$form = $this->createForm(TableauType::class,$tableau);
 
         $form->handleRequest($request);
-        //dd($form->get('Lead')->getData());
+
         if($form->isSubmitted() && $form->isValid())
         {
-            //dd($form->get('Lead')->getData());
-
-            /*$lead = $form->get('lead')->getData();
-            $lead_personne = new Personne();
-
-            if ($lead instanceof Personne) {
-                //dd($lead);
-                $tableau->setLead($form->get('lead')->getData());
-            }*/
-
-
-
-            //dd($firstName);
-            //dd($name);
-            //dd($age);
-
-
-
+            $lead = $form->get('lead')->getData();
+            //dd($lead);
+            if($lead instanceof Lead)
+            {
+                $tableau->setLead($lead);
+            }
 
 
             $entityManager->persist($tableau);
@@ -95,9 +89,9 @@ class BoardController extends AbstractController
         $form = $this->createFormBuilder($tableau)
             ->add('name')
             ->add('lead', ChoiceType::class, [
-                'choices' => $this->doctrine->getRepository(Personne::class)->findAll(),
-                'choice_label' => 'name', // remplacer 'nom' par le champ que vous souhaitez afficher dans la liste déroulante
-                'placeholder' => 'Sélectionner une personne', // facultatif: affiche un choix vide au début de la liste déroulante
+                'choices' => $this->doctrine->getRepository(Lead::class)->findAll(),
+                'choice_label' => 'name',
+                'placeholder' => 'Sélectionner une personne',
             ])
             ->add('enregistrer', SubmitType::class)
             ->getForm();
@@ -110,12 +104,12 @@ class BoardController extends AbstractController
             //dd($lead);
 
 
-            if ($lead instanceof Personne) {
+            if ($lead instanceof Lead) {
                 //dd($lead);
                 $tableau->setLead($lead);
 
             }
-
+            //dd($tableau);
             $entityManager = $this->doctrine->getManager();
             $entityManager->persist($tableau);
             $entityManager->flush();

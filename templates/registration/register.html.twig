@@ -10,8 +10,14 @@
 <body>
     <h1>Register</h1>
 
-    {{ form_start(registrationForm) }}
-    {{ form_row(registrationForm.email) }}
+    {{ form_start(  registrationForm,  {'attr': {'novalidate': 'novalidate'}}   )}}
+
+    {{ form_row(   registrationForm.name, {'attr': {'required': true}}) }}
+
+    {{ form_row(registrationForm.firstname, {'attr': {'required': true}}) }}
+
+    {{ form_row(registrationForm.email, {'attr': {'required': true}}) }}
+
     {{ form_row(registrationForm.plainPassword, {
         label: 'Password'
     }) }}

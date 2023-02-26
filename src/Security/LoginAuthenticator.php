@@ -50,6 +50,13 @@ class LoginAuthenticator extends AbstractLoginFormAuthenticator
         // return new RedirectResponse($this->urlGenerator->generate('some_route'));
         //throw new \Exception('TODO: provide a valid redirect inside '.__FILE__);
 
+        if ($token !== null) {
+            // Récupération de l'utilisateur connecté
+            $user = $token->getUser();
+            $roles = $user->getRoles();
+            dd($user);
+
+        }
         return new RedirectResponse($this->urlGenerator->generate('user.list.alls'));
     }
 

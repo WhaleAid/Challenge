@@ -30,7 +30,7 @@ class UserController extends AbstractController
     #[Route('/', name: 'user.list')]
     public function index(ManagerRegistry $doctrine) : Response
     {
-        $repository = $doctrine->getRepository(Personne::class);
+        $repository = $doctrine->getRepository(User::class);
 
         $users = $repository->findAll();
         return $this->render('user/index.html.twig', [
@@ -109,7 +109,7 @@ class UserController extends AbstractController
     {
 
 
-        $user = new Personne();
+        $user = new User();
         $form = $this->createForm(UserType::class,$user);
         $form->remove('createdAt');
         $form->remove('updatedAt');
