@@ -18,6 +18,7 @@ class Tableau1Type extends AbstractType
             ->add('equipe')
             //->add('lead')
             //->add('manager')
+
         ;
     }
 

@@ -73,7 +73,7 @@ class UserController extends AbstractController
     public function indexAllsByAge(ManagerRegistry $doctrine, $ageMin, $ageMax): Response
     {
         $repository = $doctrine->getRepository(User::class);
-        $users = $repository->finduserByAgeInterval($ageMin, $ageMax);
+        $users = $repository->finduserByAgeInterval($ageMin,$ageMax);
 
         return $this->render('user/ageInterval.html.twig', ['users' => $users]);
     }
@@ -83,7 +83,7 @@ class UserController extends AbstractController
     public function indexStatsByAge(ManagerRegistry $doctrine, $ageMin, $ageMax): Response
     {
         $repository = $doctrine->getRepository(User::class);
-        $stats = $repository->statsUserByAgeInterval($ageMin, $ageMax);
+        $stats = $repository->statsUserByAgeInterval($ageMin,$ageMax);
 
         return $this->render('user/statsAgeInterval.html.twig', [
             'stats' => $stats,
@@ -247,7 +247,7 @@ class UserController extends AbstractController
         if ($user) {
             $user->setName($name);
             $user->setFirstname($firstname);
-            $user->setAge($age);
+
 
             $doctrine->getManager()->persist($user);
             $doctrine->getManager()->flush();

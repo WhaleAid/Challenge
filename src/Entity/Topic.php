@@ -18,6 +18,9 @@ class Topic
     #[ORM\ManyToMany(targetEntity: Tache::class, inversedBy: 'topics')]
     private Collection $tache;
 
+    #[ORM\Column(length: 255)]
+    private ?string $titre = null;
+
     public function __construct()
     {
         $this->tache = new ArrayCollection();
@@ -48,6 +51,18 @@ class Topic
     public function removeTache(Tache $tache): self
     {
         $this->tache->removeElement($tache);
+
+        return $this;
+    }
+
+    public function getTitre(): ?string
+    {
+        return $this->titre;
+    }
+
+    public function setTitre(string $titre): self
+    {
+        $this->titre = $titre;
 
         return $this;
     }
