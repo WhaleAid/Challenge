@@ -112,10 +112,10 @@ class TableauController extends AbstractController
     #[Route('/{id}', name: 'app_tableau_delete', methods: ['POST'])]
     public function delete(Request $request, Tableau $tableau, TableauRepository $tableauRepository): Response
     {
+
         if ($this->isCsrfTokenValid('delete'.$tableau->getId(), $request->request->get('_token'))) {
             $tableauRepository->remove($tableau, true);
         }
-
         return $this->redirectToRoute('tableau_index', [], Response::HTTP_SEE_OTHER);
     }
 }
