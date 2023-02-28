@@ -13,13 +13,13 @@ use Symfony\Component\Security\Http\Logout\LogoutSuccessHandlerInterface;
 
 class SecurityController extends AbstractController
 {
-    #[Route(path: '/login', name: 'app_login')]
+    #[Route(path: '/', name: 'app_login'), Route(path: '/login', name: 'app_login_')]
     public function login(AuthenticationUtils $authenticationUtils, Security $security): Response | RedirectResponse
     {
         if ($security->isGranted('ROLE_MANAGER')) {
             return new RedirectResponse($this->generateUrl('user.list.alls'));
         } else if ( $security->isGranted('ROLE_DEV')) {
-            return new RedirectResponse($this->generateUrl('adm.tableau.detail', ['id' => 1]));
+            return new RedirectResponse($this->generateUrl('adm.tableau.detail'));
         }
 
         // get the login error if there is one

@@ -38,7 +38,7 @@ class Tableau
     private ?Lead $lead = null;
 
     #[ORM\ManyToOne(inversedBy: 'tableau')]
-    private ?Manager $manager = null;
+    private ?User $user = null;
 
     #[ORM\OneToMany(mappedBy: 'tableau', targetEntity: Tache::class)]
     private Collection $taches;
@@ -150,14 +150,14 @@ class Tableau
         return $this;
     }
 
-    public function getManager(): ?Manager
+    public function getUser(): ?User
     {
-        return $this->manager;
+        return $this->user;
     }
 
-    public function setManager(?Manager $manager): self
+    public function setUser(?User $user): self
     {
-        $this->manager = $manager;
+        $this->user = $user;
 
         return $this;
     }

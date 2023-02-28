@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Tableau;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -38,6 +39,16 @@ class TableauRepository extends ServiceEntityRepository
             $this->getEntityManager()->flush();
         }
     }
+    public function findTableauByUser(int $user_id)
+    {
+        return $this->createQueryBuilder('od')
+            ->select('od')
+            ->where('od.user = :user')
+            ->setParameter('user', $user_id)
+            ->getQuery()
+            ->getResult();
+    }
+
 
 //    /**
 //     * @return Tableau[] Returns an array of Tableau objects

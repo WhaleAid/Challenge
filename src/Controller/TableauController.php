@@ -3,10 +3,8 @@
 namespace App\Controller;
 
 use App\Entity\Lead;
+use App\Entity\Manager;
 use App\Entity\Tableau;
-use App\Entity\User;
-use App\Form\Tableau1Type;
-use App\Form\TableauType;
 use App\Repository\TableauRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -25,11 +23,14 @@ class TableauController extends AbstractController
     public function index(TableauRepository $tableauRepository): Response
     {
         if ($this-> isGranted('ROLE_MANAGER')) {
+            $user_id = $this->getUser()->getId();
+            //dd($tableauRepository->findOneBy(['user_id' => $user_id]));
             return $this->render('tableau/index.html.twig', [
-                'tableaus' => $tableauRepository->findBy(['manager_id' => $this->getUser()->getId()])
+                'tableaus' => $tableauRepository->findTableauByUser($user_id)
             ]);
         } else {
-            return $this->render('adm.tableau.detail');
+            //return $this->render('adm.tableau.detail');
+            return $this->render('tableau/detail.html.twig');
         }
     }
 
@@ -48,11 +49,14 @@ class TableauController extends AbstractController
             ->add('enregistrer', SubmitType::class)
             ->getForm();
 
+
+
         //$form = $this->createForm(Tableau1Type::class, $tableau);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $tableau->setManager($this->getUser());
+            //dd($tableau);
+            $tableau->setUser($this->getUser());
             $tableauRepository->save($tableau, true);
 
             return $this->redirectToRoute('tableau_index', [], Response::HTTP_SEE_OTHER);
@@ -107,7 +111,7 @@ class TableauController extends AbstractController
             return $this->render('tableau/detail.html.twig', [
                 'tableau' => $tableau
             ]);
-        }
+    }
 
     #[Route('/{id}', name: 'app_tableau_delete', methods: ['POST'])]
     public function delete(Request $request, Tableau $tableau, TableauRepository $tableauRepository): Response

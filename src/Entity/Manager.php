@@ -40,7 +40,7 @@ class Manager extends User
     {
         if (!$this->tableau->contains($tableau)) {
             $this->tableau->add($tableau);
-            $tableau->setManager($this);
+            $tableau->setUser($this);
         }
 
         return $this;
@@ -50,8 +50,8 @@ class Manager extends User
     {
         if ($this->tableau->removeElement($tableau)) {
             // set the owning side to null (unless already changed)
-            if ($tableau->getManager() === $this) {
-                $tableau->setManager(null);
+            if ($tableau->getUser() === $this) {
+                $tableau->setUser(null);
             }
         }
 

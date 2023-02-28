@@ -23,7 +23,8 @@
                 <td>{{ tableau.createdAt ? tableau.createdAt|date('Y-m-d H:i:s') : '' }}</td>
                 <td>{{ tableau.updatedAt ? tableau.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
                 <td>
-                    <a href="{{ path('app_tableau_show', {'id': tableau.id}) }}">show</a>
+                    {#<a href="{{ path('app_tableau_show', {'id': tableau.id}) }}">show</a>#}
+
                     <a href="{{ path('app_tableau_edit', {'id': tableau.id}) }}">edit</a>
                 </td>
             </tr>

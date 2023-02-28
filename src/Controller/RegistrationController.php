@@ -52,7 +52,7 @@ class RegistrationController extends AbstractController
             
             //$this->sendinblueMailer->sendEmail($user->getEmail(), 'Confirmation d\'inscription', 'templates/registration/confirmation_email.html.twig');
 
-            $this->sendinblueMailer->sendEmail("idirwalidhakim32@gmail.com","registration mail pnou9","<p>Confirmation</p>>");
+            $this->sendinblueMailer->sendEmail("idirwalidhakim32@gmail.com","registration mail","<p>Confirmation</p>>");
 
             // generate a signed url and email it to the user
             // $this->emailVerifier->sendEmailConfirmation('app_verify_email', $user,
