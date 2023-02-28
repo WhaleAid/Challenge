@@ -107,6 +107,9 @@ RUN set -eux; \
 		composer clear-cache; \
     fi
 
+# Install Webpack Encore
+RUN npm add @symfony/webpack-encore --dev
+
 # copy sources
 COPY . .
 RUN rm -Rf docker/
